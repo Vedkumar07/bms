@@ -6,7 +6,7 @@ const preferredPort = Number(process.env.PORT ?? 8082);
 const startServer = (port: number) => {
   const httpServer = createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('WebSocket server is running. Use ws://localhost:' + port + ' to connect.');
+    res.end('Welcome to ws-server');
   });
 
   const wss = new WebSocketServer({ server: httpServer });

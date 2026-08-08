@@ -1,12 +1,7 @@
-import { client } from '@repo/db/client';
-
-export default async function Home() {
-  const user = (await client.user.findFirst()) as { username?: string; password?: string } | null;
-
+export default function Home() {
   return (
-    <div>
-      <p>Username: {user?.username ?? 'No user found'}</p>
-      <p>Password: {user?.password ?? 'No user found'}</p>
-    </div>
+    <main style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
+      <h1>Welcome to web</h1>
+    </main>
   );
 }
