@@ -7,7 +7,7 @@ const port = Number(process.env.PORT ?? 3001);
 app.use(express.json());
 
 app.get('/', (_req, res) => {
-  res.json({ message: 'http-server is running' });
+  res.json({ message: 'Welcome to http-server' });
 });
 
 app.post('/signup', async (req, res) => {
