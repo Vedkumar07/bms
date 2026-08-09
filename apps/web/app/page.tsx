@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <main style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h1>Welcome to web</h1>
+      <h1>Welcome to ved</h1>
     </main>
   );
 }
