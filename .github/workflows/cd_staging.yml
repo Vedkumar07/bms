@@ -15,6 +15,6 @@ jobs:
                 echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
                 mkdir -p /home/runner/.ssh
                 echo "${{ secrets.KNOWN_HOST }}" &> ~/.ssh/known_hosts
-                chmod 700 /home/runner/ssh_key
+                chmod 600 ~/ssh_key
                 ssh -i ~/ssh_key ubuntu@3.235.138.41 -t "cd ~/bms && git pull origin main && pnpm install && pnpm run build
                 && pm2 restart fe-server && pm2 restart http-server && pm2 restart ws-server "
