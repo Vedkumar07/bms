@@ -1,41 +1,26 @@
 name: Deploy to staging
 
 on:
-  push:
-    branches: [main]
+    push:
+        branches: [ main ]
 
 jobs:
-  redeploy_everything:
-    runs-on: ubuntu-latest
-    name: Deploying everything to the staging cluster
+    redeploy_everything:
+        runs-on: ubuntu-latest
+        name: Deploying everything to the staging cluster
 
-    steps:
-      - name: Test SSH setup
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          KNOWN_HOST: ${{ secrets.KNOWN_HOST }}
+        steps:
 
-        run: |
-          set -e
-
-          mkdir -p ~/.ssh
-
-          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/ssh_key
-          chmod 600 ~/.ssh/ssh_key
-
-          printf '%s\n' "$KNOWN_HOST" > ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-
-          echo "===== known_hosts ====="
-          cat ~/.ssh/known_hosts
-
-          echo "===== SSH keyscan/check ====="
-          ssh-keygen -lf ~/.ssh/known_hosts
-
-          echo "===== SSH config test ====="
-          ssh -vvv \
-            -i ~/.ssh/ssh_key \
-            -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
-            -o StrictHostKeyChecking=yes \
-            ubuntu@3.235.138.41 \
-            "echo SSH_CONNECTION_SUCCESS"
+            - run: |
+                echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
+                mkdir -p /home/runner/.ssh
+                echo "${{ secrets.KNOWN_HOST }}" &> ~/.ssh/known_hosts
+                ssh -i ~/ssh_key ubuntu@3.235.138.41 << 'EOF'
+                cd ~/bms
+                git pull
+                pnpm install
+                pnpm run build
+                pm2 restart fe-server
+                pm2 restart http-server
+                pm2 restart ws-server
+                EOF
