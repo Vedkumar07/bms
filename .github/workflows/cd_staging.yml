@@ -5,11 +5,12 @@ on:
         - "main"
 jobs:
     redeploy_everything:
+        runs-on: ubuntu-latest
         name: Deploying everything to the staging cluster
-
+        
         steps:
-            - name: SSH Into server
-            - run: |
+            name: SSH Into server
+            run: |
                 echo ${{ secrets.SSH_PRIVATE_KEY }} &> ~/ssh_key
                 ssh -i ~/ssh_key root@3.235.138.41
                 cd bms/ && git pull
